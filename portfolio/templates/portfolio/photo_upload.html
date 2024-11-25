@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Upload Photo to {{ gallery.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-900">Upload Photo to {{ gallery.name }}</h1>
+                <p class="mt-1 text-sm text-gray-600">Add a new photo to your gallery.</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                {{ form|crispy }}
+                
+                <div class="flex justify-end gap-3">
+                    <a href="{% url 'gallery_detail' gallery.slug %}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Upload Photo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

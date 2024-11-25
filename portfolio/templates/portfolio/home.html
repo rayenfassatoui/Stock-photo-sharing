@@ -1,43 +1,62 @@
 {% extends 'base.html' %}
 
-{% block title %}Welcome to Photo Portfolio{% endblock %}
+{% block title %}Welcome to Stockify{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center bg-light py-5 mb-4">
-    <h1 class="display-4">Welcome to Photo Portfolio</h1>
-    <p class="lead">Share your photography with the world</p>
-    {% if not user.is_authenticated %}
-        <div class="mt-4">
-            <a href="{% url 'register' %}" class="btn btn-primary btn-lg mx-2">Get Started</a>
-            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg mx-2">Login</a>
-        </div>
-    {% endif %}
+<div class="relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16 mb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Welcome to Stockify</h1>
+        <p class="text-xl md:text-2xl text-indigo-100 mb-8">Share your photography with the world</p>
+        {% if not user.is_authenticated %}
+            <div class="space-x-4">
+                <a href="{% url 'register' %}" class="inline-block bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors duration-200">Get Started</a>
+                <a href="{% url 'login' %}" class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-600 transition-colors duration-200">Login</a>
+            </div>
+        {% endif %}
+    </div>
 </div>
 
-<h2 class="mb-4">Featured Galleries</h2>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for gallery in galleries %}
-    <div class="col">
-        <div class="card h-100">
-            {% if gallery.photos.first %}
-                <img src="{{ gallery.photos.first.image.url }}" class="card-img-top" alt="{{ gallery.name }}" style="height: 200px; object-fit: cover;">
-            {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <i class="fas fa-images fa-3x text-muted"></i>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Galleries</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for gallery in galleries %}
+        <div class="group">
+            <div class="relative aspect-w-16 aspect-h-12 rounded-xl overflow-hidden mb-4">
+                {% if gallery.photos.first %}
+                    <img src="{{ gallery.photos.first.image.url }}" alt="{{ gallery.name }}" class="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300">
+                {% else %}
+                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-semibold text-gray-900">{{ gallery.name }}</h3>
+                <p class="text-gray-600 line-clamp-2">{{ gallery.description|truncatewords:20 }}</p>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm text-gray-500">By {{ gallery.user.username }}</p>
+                    <a href="{% url 'gallery_detail' gallery.slug %}" class="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium">
+                        View Gallery
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
                 </div>
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ gallery.name }}</h5>
-                <p class="card-text">{{ gallery.description|truncatewords:20 }}</p>
-                <p class="card-text"><small class="text-muted">By {{ gallery.user.username }}</small></p>
-                <a href="{% url 'gallery_detail' gallery.slug %}" class="btn btn-primary">View Gallery</a>
             </div>
         </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No galleries</h3>
+            <p class="mt-1 text-sm text-gray-500">No public galleries available yet.</p>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="col-12 text-center">
-        <p>No public galleries available yet.</p>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}

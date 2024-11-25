@@ -1,0 +1,17 @@
+{
+  "name": "stockify",
+  "version": "1.0.0",
+  "description": "A modern stock photo sharing platform",
+  "scripts": {
+    "build:css": "tailwindcss -i ./portfolio/static/css/tailwind.css -o ./portfolio/static/css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./portfolio/static/css/tailwind.css -o ./portfolio/static/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
+  }
+}

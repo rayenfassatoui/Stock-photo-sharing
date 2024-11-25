@@ -8,7 +8,7 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ['username', 'email', 'password1', 'password2']
 
 class GalleryForm(forms.ModelForm):
     class Meta:
@@ -26,17 +26,6 @@ class PhotoForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 3}),
             'tags': forms.TextInput(attrs={'placeholder': 'Enter tags separated by commas'}),
         }
-
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-class PhotoBulkUploadForm(forms.Form):
-    gallery = forms.ModelChoiceField(queryset=Gallery.objects.none())
-    images = forms.FileField(widget=MultipleFileInput())
-    
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['gallery'].queryset = Gallery.objects.filter(user=user)
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -16,9 +16,9 @@ urlpatterns = [
     path('gallery/<slug:slug>/share/', views.share_gallery, name='share_gallery'),
     
     # Photo URLs
-    path('gallery/<slug:gallery_slug>/upload/', views.photo_upload, name='photo_upload'),
-    path('photo/bulk-upload/', views.photo_bulk_upload, name='photo_bulk_upload'),
+    path('gallery/<int:gallery_id>/upload/', views.photo_upload, name='photo_upload'),
     path('photo/<int:pk>/', views.photo_detail, name='photo_detail'),
+    path('photo/<int:pk>/delete/', views.photo_delete, name='photo_delete'),
     
     # Search
     path('search/', views.search_photos, name='search_photos'),

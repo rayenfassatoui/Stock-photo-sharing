@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    /* Custom modern components */
+    .btn-primary {
+        @apply px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200;
+    }
+    
+    .card {
+        @apply bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300;
+    }
+    
+    .nav-link {
+        @apply text-gray-600 hover:text-indigo-600 transition-colors duration-200;
+    }
+    
+    .form-input {
+        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50;
+    }
+    
+    .gallery-grid {
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+    }
+    
+    .photo-card {
+        @apply relative group overflow-hidden rounded-xl;
+    }
+    
+    .photo-overlay {
+        @apply absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100;
+    }
+    
+    .section-header {
+        @apply text-3xl font-bold text-gray-800 mb-8;
+    }
+    
+    .gradient-text {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600;
+    }
+}

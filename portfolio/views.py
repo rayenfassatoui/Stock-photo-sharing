@@ -6,8 +6,9 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.db.models import Q
 from .forms import (UserRegistrationForm, GalleryForm, PhotoForm,
-                   PhotoBulkUploadForm, CommentForm, ShareGalleryForm)
+                   CommentForm, ShareGalleryForm)
 from .models import Gallery, Photo, Comment, SharedAlbum, User
+from django.utils import timezone
 
 def home(request):
     galleries = Gallery.objects.filter(is_public=True).order_by('-created_at')[:9]
@@ -80,38 +81,21 @@ def gallery_detail(request, slug):
     })
 
 @login_required
-def photo_upload(request, gallery_slug):
-    gallery = get_object_or_404(Gallery, slug=gallery_slug, user=request.user)
+def photo_upload(request, gallery_id):
+    gallery = get_object_or_404(Gallery, id=gallery_id, user=request.user)
     if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             photo = form.save(commit=False)
             photo.gallery = gallery
+            photo.user = request.user
             photo.save()
+            form.save_m2m()  # Save tags
             messages.success(request, 'Photo uploaded successfully!')
             return redirect('gallery_detail', slug=gallery.slug)
     else:
         form = PhotoForm()
-    return render(request, 'portfolio/photo_form.html', {'form': form, 'gallery': gallery})
-
-@login_required
-def photo_bulk_upload(request):
-    if request.method == 'POST':
-        form = PhotoBulkUploadForm(request.user, request.POST, request.FILES)
-        if form.is_valid():
-            gallery = form.cleaned_data['gallery']
-            files = request.FILES.getlist('images')
-            for file in files:
-                Photo.objects.create(
-                    gallery=gallery,
-                    image=file,
-                    title=file.name
-                )
-            messages.success(request, f'{len(files)} photos uploaded successfully!')
-            return redirect('gallery_detail', slug=gallery.slug)
-    else:
-        form = PhotoBulkUploadForm(request.user)
-    return render(request, 'portfolio/photo_bulk_upload.html', {'form': form})
+    return render(request, 'portfolio/photo_upload.html', {'form': form, 'gallery': gallery})
 
 @login_required
 def photo_detail(request, pk):
@@ -140,6 +124,18 @@ def photo_detail(request, pk):
         'form': form,
         'comments': comments
     })
+
+@login_required
+def photo_delete(request, pk):
+    photo = get_object_or_404(Photo, pk=pk)
+    if request.user != photo.gallery.user:
+        messages.error(request, 'You do not have permission to delete this photo.')
+        return redirect('photo_detail', pk=pk)
+    
+    gallery_slug = photo.gallery.slug
+    photo.delete()
+    messages.success(request, 'Photo deleted successfully!')
+    return redirect('gallery_detail', slug=gallery_slug)
 
 @login_required
 def share_gallery(request, slug):

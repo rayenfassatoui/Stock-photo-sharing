@@ -1,4 +1,6 @@
-Django>=5.1.3
-Pillow>=10.1.0  # For image handling
+Django==5.1.3
+Pillow==10.2.0  # For image handling
 python-dotenv>=1.0.0  # For environment variables
-django-crispy-forms>=2.1  # For better form rendering
+django-crispy-forms==2.1  # For better form rendering
+crispy-bootstrap5==2023.10
+django-tailwind==3.8.0
