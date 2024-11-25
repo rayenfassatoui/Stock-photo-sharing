@@ -10,9 +10,10 @@ I created Stockify because I believe every photographer deserves a professional 
 
 ### 📱 Core Features
 - **Smart Gallery Management**: Create, organize, and customize your photo galleries
-- **Bulk Upload**: Save time by uploading multiple photos at once
+- **Single Photo Upload**: Easy and reliable photo uploading system
 - **Privacy Controls**: Choose who sees your work with public/private gallery settings
 - **Tagging System**: Make your photos discoverable with custom tags
+- **Modern UI**: Beautiful, responsive interface built with Tailwind CSS
 
 ### 👥 Social Features
 - **User Profiles**: Showcase your portfolio and build your brand
@@ -23,8 +24,9 @@ I created Stockify because I believe every photographer deserves a professional 
 ### 🛠 Technical Features
 - **Responsive Design**: Looks great on any device
 - **Image Optimization**: Auto-optimization for fast loading
-- **Secure Authentication**: Keep your account safe
-- **Clean URLs**: SEO-friendly gallery and photo URLs
+- **Secure Authentication**: Keep your account safe with Clerk authentication
+- **Clean URLs**: SEO-friendly gallery and photo URLs using slugs
+- **Modern Stack**: Built with Django 5.1.3 and Tailwind CSS
 
 ## 🚀 Getting Started
 
@@ -36,16 +38,18 @@ I created Stockify because I believe every photographer deserves a professional 
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
+   npm install
    ```
 
-3. Run migrations:
+3. Set up environment variables:
+   ```bash
+   # Create a .env file in the root directory and add:
+   CLERK_API_KEY=your_clerk_api_key
+   ```
+
+4. Run migrations:
    ```bash
    python manage.py migrate
-   ```
-
-4. Create a superuser:
-   ```bash
-   python manage.py createsuperuser
    ```
 
 5. Start the development server:
@@ -54,15 +58,16 @@ I created Stockify because I believe every photographer deserves a professional 
    ```
 
 ## 🛠️ Built With
-- **Backend**: Django 5.1.3 - Because reliability matters
-- **Frontend**: Bootstrap 5 - For that clean, modern look
-- **Database**: SQLite (development) - Easy to set up and get going
-- **Forms**: django-crispy-forms - Because forms should look good too
-- **Icons**: Font Awesome - For those sweet, sweet visual touches
+- **Backend**: Django 5.1.3
+- **Frontend**: Tailwind CSS
+- **Database**: SQLite
+- **Authentication**: Clerk
+- **Forms**: django-crispy-forms with crispy-tailwind
+- **Icons**: Heroicons
 
 ## 📝 Future Plans
 I'm constantly working on making Stockify better! Here's what's coming:
-- 🎨 Advanced image editing features
+- 🎨 Drag-and-drop photo upload
 - 🌐 Social media integration
 - 📊 Analytics dashboard for photographers
 - 📱 Mobile app
