@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to Photo Portfolio{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center bg-light py-5 mb-4">
+    <h1 class="display-4">Welcome to Photo Portfolio</h1>
+    <p class="lead">Share your photography with the world</p>
+    {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg mx-2">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg mx-2">Login</a>
+        </div>
+    {% endif %}
+</div>
+
+<h2 class="mb-4">Featured Galleries</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for gallery in galleries %}
+    <div class="col">
+        <div class="card h-100">
+            {% if gallery.photos.first %}
+                <img src="{{ gallery.photos.first.image.url }}" class="card-img-top" alt="{{ gallery.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-images fa-3x text-muted"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ gallery.name }}</h5>
+                <p class="card-text">{{ gallery.description|truncatewords:20 }}</p>
+                <p class="card-text"><small class="text-muted">By {{ gallery.user.username }}</small></p>
+                <a href="{% url 'gallery_detail' gallery.slug %}" class="btn btn-primary">View Gallery</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p>No public galleries available yet.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

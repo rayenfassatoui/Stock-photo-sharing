@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ photo.title }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'gallery_detail' photo.gallery.slug %}">{{ photo.gallery.name }}</a></li>
+        <li class="breadcrumb-item active">{{ photo.title }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.title }}">
+            <div class="card-body">
+                <h1 class="card-title">{{ photo.title }}</h1>
+                {% if photo.description %}
+                    <p class="card-text">{{ photo.description }}</p>
+                {% endif %}
+                {% if photo.tags %}
+                    <p class="card-text">
+                        {% for tag in photo.tags.split %} 
+                            <span class="badge bg-secondary">{{ tag }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                <p class="card-text">
+                    <small class="text-muted">
+                        Uploaded by {{ photo.gallery.user.username }} 
+                        on {{ photo.uploaded_at|date:"F j, Y" }}
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        {% if photo.allow_comments %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Add a Comment</h5>
+                </div>
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                        </form>
+                    {% else %}
+                        <p class="mb-0">Please <a href="{% url 'login' %}">login</a> to comment.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Comments ({{ comments.count }})</h5>
+            </div>
+            <div class="card-body">
+                {% for comment in comments %}
+                    <div class="mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <small class="text-muted">
+                            {{ comment.user.username }} - {{ comment.created_at|timesince }} ago
+                        </small>
+                    </div>
+                {% empty %}
+                    <p class="text-muted mb-0">No comments yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
